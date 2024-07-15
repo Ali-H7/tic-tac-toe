@@ -10,21 +10,23 @@ const gameBoard = (function(){
     return {board, display};
 })();
 
-function createPlayers() {
-    let playerOne; 
-    let playerTwo; 
-    let playerOneMark; 
-    let playerTwoMark; 
+function createPlayer (playerName, playerMark) {
+    const player = playerName
+    const mark = playerMark
+    return {player , mark}
+};
+ 
+const players = function playerInfo() {
+    const playerOne = prompt("Player 1, What is your name?");
+    const playerTwo = prompt("Player 2, What is your name?");
+    const playerOneMark = prompt("Player 1, What is your choice X or O?").toUpperCase();
+    const playerTwoMark = playerOneMark === "X" ? "O" : "X";
 
-    function getPlayersInfo () {
-        playerOne = prompt("Player 1, What is your name?");
-        playerTwo = prompt("Player 2, What is your name?");
-        playerOneMark = prompt("Player 1, What is your choice X or O?");
-        playerTwoMark = prompt("Player 2, What is your choice X or O?");
+    const player1 = createPlayer(playerOne, playerOneMark);
+    const player2 = createPlayer(playerTwo, playerTwoMark);  
 
-    }
+    return {player1, player2}
+};
 
-    return {playerOne};
-}
 
-const players = createPlayers();
+ 
