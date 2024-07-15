@@ -40,6 +40,7 @@ const turn = (function() {
         gameBoard.player1.push(playerChoice);
         gameBoard.board[playerChoice - 1] = players.player1.mark;
         gameBoard.display();
+        checkWinner()
     };
     
     function playerTwoTurn(){
@@ -51,11 +52,54 @@ const turn = (function() {
     return {playerOneTurn, playerTwoTurn}; 
 })();
 
+function checkWinner() {
+    const winningCondition = {
+        1: [1,2,3],
+        2: [4,5,6],
+        3: [7,8,9],
+        4: [1,4,7],
+        5: [2,5,8],
+        6: [3,6,9],
+        7: [1,5,9],
+        8: [3,5,7],
+    };
+
+    for (let i = 1; i < 8; i++) {
+        const checkPlayerOne = winningCondition[i].every((element) => gameBoard.player1.includes(element));
+        const checkPlayerTwo = winningCondition[i].every((element) => gameBoard.player2.includes(element));
+        if (checkPlayerOne) {
+            console.log("Player one is the Winner!");
+        } else if (checkPlayerTwo) {
+            console.log("Player Two is the Winner!");
+        }
+    }
+};
+
+
+
+
+
+
+
+
 
 function gameController() {
     gameBoard.display();
     turn.playerOneTurn();
     turn.playerTwoTurn();
+    checkWinner()
+    turn.playerOneTurn();
+    turn.playerTwoTurn();
+    checkWinner()
+    turn.playerOneTurn();
+    turn.playerTwoTurn();
+    checkWinner()
+    turn.playerOneTurn();
+    turn.playerTwoTurn();
+    checkWinner()
+    turn.playerOneTurn();
+    turn.playerTwoTurn();
+    checkWinner()
 }
 
 gameController()
