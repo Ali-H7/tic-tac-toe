@@ -34,22 +34,26 @@ const players = (function playerInfo() {
 
 const turn = (function() {
     let playerChoice;
+    let currentTurn = 1
 
-    function playerOneTurn(){
-        playerChoice = +prompt("Player 1, Where do you want to play 1-9");
-        gameBoard.player1.push(playerChoice);
-        gameBoard.board[playerChoice - 1] = players.player1.mark;
-        gameBoard.display();
-        checkWinner()
-    };
+    function playersTurn() {
+        if (currentTurn % 2 == 1) {
+            currentTurn += 1
+            playerChoice = +prompt("Player 1, Where do you want to play 1-9");
+            gameBoard.player1.push(playerChoice);
+            gameBoard.board[playerChoice - 1] = players.player1.mark;
+            checkWinner()
+        } else if (currentTurn % 2 == 0) {
+            currentTurn += 1
+            let playerChoice = +prompt("Player 2, Where do you want to play 1-9");
+            gameBoard.player2.push(playerChoice);
+            gameBoard.board[playerChoice - 1] = players.player2.mark;
+            checkWinner()
+        }
+    }
+
     
-    function playerTwoTurn(){
-        let playerChoice = +prompt("Player 2, Where do you want to play 1-9");
-        gameBoard.player2.push(playerChoice);
-        gameBoard.board[playerChoice - 1] = players.player2.mark;
-        gameBoard.display();
-    };
-    return {playerOneTurn, playerTwoTurn}; 
+    return {playersTurn}; 
 })();
 
 function checkWinner() {
@@ -63,43 +67,36 @@ function checkWinner() {
         7: [1,5,9],
         8: [3,5,7],
     };
+    let gameOver = false; 
 
-    for (let i = 1; i < 8; i++) {
+    for (let i = 1; i < 9; i++) {
         const checkPlayerOne = winningCondition[i].every((element) => gameBoard.player1.includes(element));
         const checkPlayerTwo = winningCondition[i].every((element) => gameBoard.player2.includes(element));
         if (checkPlayerOne) {
             console.log("Player one is the Winner!");
+            gameOver = true;
+            gameBoard.display();
         } else if (checkPlayerTwo) {
             console.log("Player Two is the Winner!");
-        }
+            gameOver = true;
+            gameBoard.display();
+        } 
     }
+
+    if (gameBoard.player1.length + gameBoard.player2.length == 9 && gameOver == false) {
+        console.log("It's a tie no one won!");
+            gameOver = true;
+            gameBoard.display();
+    }
+
+    if (!gameOver) {
+        gameController()
+    } 
 };
-
-
-
-
-
-
-
-
 
 function gameController() {
     gameBoard.display();
-    turn.playerOneTurn();
-    turn.playerTwoTurn();
-    checkWinner()
-    turn.playerOneTurn();
-    turn.playerTwoTurn();
-    checkWinner()
-    turn.playerOneTurn();
-    turn.playerTwoTurn();
-    checkWinner()
-    turn.playerOneTurn();
-    turn.playerTwoTurn();
-    checkWinner()
-    turn.playerOneTurn();
-    turn.playerTwoTurn();
-    checkWinner()
+    turn.playersTurn();
 }
 
 gameController()
