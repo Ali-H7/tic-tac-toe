@@ -10,7 +10,18 @@ const gameBoard = (function(){
         console.log(board[6], board[7], board[8]);
     }
 
-    return {board, display, player1, player2};
+    function resetBoard() {
+      gameBoard.board = [1,2,3,4,5,6,7,8,9];
+      gameBoard.player1 = [];
+      gameBoard.player2 = [];
+
+      const squares = document.querySelectorAll(".square");
+      squares.forEach (square => {
+        square.textContent = "";
+      })
+    }
+
+    return {board, display, player1, player2, resetBoard};
 })();
  
 function playerInfo() {
@@ -43,22 +54,22 @@ const turn = (function() {
     const {player1} = playerInfo();
     const {player2} = playerInfo(); 
     return function playersTurn(htmlSquare) {
-        if (currentTurn % 2 == 1) {
-            currentTurn += 1;
-            playerChoice = htmlSquare.id;
+        if (currentTurn == 1) {
+            currentTurn -= 1;
+            playerChoice = +htmlSquare.id;
             gameBoard.player1.push(playerChoice);
             gameBoard.board[playerChoice - 1] = player1.mark;
             htmlSquare.textContent = player1.mark;
             console.log(gameBoard.display())
-            // checkWinner();
-        } else if (currentTurn % 2 == 0) {
+            checkWinner();
+        } else if (currentTurn == 0) {
             currentTurn += 1;
-            let playerChoice = htmlSquare.id;
+            let playerChoice = +htmlSquare.id;
             gameBoard.player2.push(playerChoice);
             gameBoard.board[playerChoice - 1] = player2.mark;
             htmlSquare.textContent = player2.mark;
             console.log(gameBoard.display())
-            // checkWinner();
+            checkWinner();
         }
         // continueGame();
     };
@@ -97,15 +108,20 @@ function gameCondition() {
                 gameOver = true;
                 gameBoard.display();
         }
-    }
-
-    function continueGame() {
-        if (!gameOver) {
-            gameController();
+        if (gameOver) {
+          gameOver = false;
+          const dialog = document.querySelector(".continue");
+          dialog.showModal();
+          const continueBtn = document.querySelector("#continue");
+          continueBtn.addEventListener ("click",()=> {
+            dialog.close();
+            gameBoard.resetBoard();
+            events.addEventListenerForBoard();
+          })
         } 
     }
 
-    return {checkWinner, continueGame}
+    return {checkWinner}
 };
 
 // function gameController() {
@@ -142,7 +158,7 @@ function displayNameMark() {
 };
 
 
- (function events () {
+ const events = (function events () {
     const dialog = document.querySelector("dialog");
     window.addEventListener("load", () => {
     dialog.showModal();
@@ -151,19 +167,24 @@ function displayNameMark() {
     const startBtn = document.querySelector("#start-button");
     startBtn.addEventListener ("click", () => {
     dialog.close();
-    playerInfo()
-    displayNameMark()
+    playerInfo();
+    displayNameMark();
+    addEventListenerForBoard();
  });
 
- const squares = document.querySelectorAll(".square");
+ function addEventListenerForBoard() {
+  const squares = document.querySelectorAll(".square");
     squares.forEach(square => {
       square.addEventListener ("click", function squareClick() {
         turn(square);
         square.removeEventListener("click", squareClick);
-      } )
-    })
-
+      });
+    });
+ };
+ return {addEventListenerForBoard};
  })();
+ 
+ 
 
 //  function placeMark(square) {
 //     const {player1} = playerInfo();
@@ -171,3 +192,5 @@ function displayNameMark() {
 //     const player1Mark = player1.mark
 //     const player2Mark = player2.mark 
 //  }
+
+// Check for winner next
