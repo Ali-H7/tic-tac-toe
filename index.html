@@ -13,18 +13,32 @@
             <h1>Tic Tac Toe</h1>
         </header>
         <div class="background">
-            <div class="board">
-                <div>X</div>
-                <div>O</div>
-                <div>X</div>
-                <div>O</div>
-                <div>X</div>
-                <div>O</div>
-                <div>X</div>
-                <div>O</div>
-                <div>X</div>
+            <div class="player-card" id="player1">
+            </div>
+            <div class="board-container">
+                <div class="board">
+                    <div>X</div>
+                    <div>O</div>
+                    <div>X</div>
+                    <div>O</div>
+                    <div>X</div>
+                    <div>O</div>
+                    <div>X</div>
+                    <div>O</div>
+                    <div>X</div>
+                </div>
+                <button class="start">Restart Game</button>
+            </div>
+            <div class="player-card" id="player2">
             </div>
         </div>
     </div>
+    <dialog>
+        <div class="player-names">
+                <p>Enter Player Names</p>
+                <input type="text" id="player1-name" placeholder="Player 1">
+                <input type="text" id="player2-name" placeholder="Player 2">
+                <button id= "start-button" class="start">Start Game</button>
+    </dialog>
 </body>
 </html>
