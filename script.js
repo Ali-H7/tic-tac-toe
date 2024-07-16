@@ -153,20 +153,21 @@ function displayNameMark() {
     dialog.close();
     playerInfo()
     displayNameMark()
+ });
 
-    const squares = document.querySelectorAll(".square");
+ const squares = document.querySelectorAll(".square");
     squares.forEach(square => {
-      square.addEventListener ("click", () => {
+      square.addEventListener ("click", function squareClick() {
         turn(square);
+        square.removeEventListener("click", squareClick);
       } )
     })
- });
 
  })();
 
- function placeMark(square) {
-    const {player1} = playerInfo();
-    const {player2} = playerInfo();
-    const player1Mark = player1.mark
-    const player2Mark = player2.mark 
- }
+//  function placeMark(square) {
+//     const {player1} = playerInfo();
+//     const {player2} = playerInfo();
+//     const player1Mark = player1.mark
+//     const player2Mark = player2.mark 
+//  }
