@@ -13,8 +13,8 @@ const gameBoard = (function (){
     function resetBoard() {
       board.length = 0;
       board.push(1,2,3,4,5,6,7,8,9);
-      player1.length = 0;
-      player2.length = 0;
+      player1Board.length = 0;
+      player2Board.length = 0;
 
       const squares = document.querySelectorAll(".square");
       squares.forEach (square => {
@@ -81,7 +81,7 @@ function game() {
     const {board, display, player1Board, player2Board, resetBoard} = gameBoard;
     const {getPlayerInfo} = player();
     playersInfo = getPlayerInfo();
-
+    const {addEventListenerForBoard} = events;
     function playTurn(playedLocation) {
         if (currentTurn == 1) {
             currentTurn -= 1;
@@ -120,8 +120,15 @@ function game() {
 
         if (gameOver === true) {
             // TODO: RESET WHEN THE GAME IS OVER!
-            // gameOver = false;
-            // currentTurn = 1;
+            const dialog = document.querySelector(".continue");
+            dialog.showModal();
+            gameOver = false;
+            currentTurn = 1;
+            const continueBtn = document.querySelector("#continue");
+            continueBtn.addEventListener ("click",()=> {
+                dialog.close();
+                resetBoard();
+          });
           } 
     }
     return {playTurn};
@@ -146,15 +153,16 @@ const events = (function events () {
         dialog.close();
  });
 
- function addEventListenerForBoard() {
-  const squares = document.querySelectorAll(".square");
-  const {playTurn} = game();
+    function addEventListenerForBoard() {
+        const squares = document.querySelectorAll(".square");
+        const {playTurn} = game();
 
-    squares.forEach(square => {
-      square.addEventListener ("click", function squareClick() {
-        playTurn(square);
-        square.removeEventListener("click", squareClick);
-      });
-    });
- };
+        squares.forEach(square => {
+        square.addEventListener ("click", function squareClick() {
+            if (square.textContent === "X" || square.textContent === "O") return; 
+            playTurn(square);
+        });
+        });
+  };
+  return {addEventListenerForBoard};
  })();
