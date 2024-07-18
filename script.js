@@ -9,7 +9,7 @@ const gameBoard = (function (){
         console.log(board[0], board[1], board[2]);
         console.log(board[3], board[4], board[5]);
         console.log(board[6], board[7], board[8]);
-    }
+    };
 
     function resetBoard() {
       board.length = 0;
@@ -21,7 +21,7 @@ const gameBoard = (function (){
       squares.forEach (square => {
         square.textContent = "";
       })
-    }
+    };
 
     return {board, display, player1Board, player2Board, resetBoard, playerScores};
 })();
@@ -65,11 +65,11 @@ function player() {
             divContainer.appendChild(playerScoreElement);
             cardElement.appendChild(divContainer);
             return {divContainer}
-    }
+    };
 
     
     return {getPlayerInfo, createElements}; 
-}
+};
 
 function game() {
     const winningCondition = {
@@ -82,6 +82,7 @@ function game() {
         7: [1,5,9],
         8: [3,5,7],
     };
+
     let gameOver = false;
     let currentTurn = 1;
     let playerChoice;
@@ -90,6 +91,7 @@ function game() {
     let {playerScores} = gameBoard;
     const {getPlayerInfo} = player();
     playersInfo = getPlayerInfo();
+
     function playTurn(playedLocation) {
         if (currentTurn == 1) {
             currentTurn -= 1;
@@ -122,21 +124,21 @@ function game() {
                 console.log(`Game Over! ${playersInfo.player2.player} is the winner!`);
                 gameOver = true;
                 updatePlayerScore("#player-score1", "#player-score2", "player2win");
-            } 
-        }
+            };
+        };
 
         if (player1Board.length + player2Board.length === 9 && gameOver === false) {
             announceResult("It's a tie no one won!");
             console.log("It's a tie no one won!");
                 gameOver = true;
-        }
+        };
 
         if (gameOver === true) {
             gameOver = false;
             currentTurn = 1;
             continueButton();
-          } 
-    }
+          } ;
+    };
 
     function updatePlayerScore(elementID1, elementID2, winner) {
         let player1Score;
@@ -160,19 +162,19 @@ function game() {
             player1ScoreElement.textContent = `Score: ${playerScores[0]}`;
             player2ScoreElement.textContent = `Score: ${playerScores[1]}`;
         })();
-    }
+    };
 
     function resetScore() {
         playerScores.length = 0;
         playerScores.push(0, 0);
-    }
+    };
 
     function announceResult(text) {
         const announcementElement = document.querySelector(".game-announcement");
         announcementElement.textContent = text;
-    }
+    };
     return {playTurn, updatePlayerScore, resetScore, currentTurn};
-}
+};
 
 const events = (function events () {
     const dialog = document.querySelector("dialog");
@@ -188,7 +190,6 @@ const events = (function events () {
         createElements(playersInfo.player1.player, playersInfo.player1.mark, "#player1", 1);
         createElements(playersInfo.player2.player, playersInfo.player2.mark, "#player2", 2);
         addEventListenerForBoard();
-        //FIX addStylingToGrid();
         game();
         dialog.close();
  });
@@ -213,7 +214,7 @@ const events = (function events () {
             dialog.close();
             gameBoard.resetBoard();
           });
-    }
+    };
 
     (function restartButton() {
         const restartBtn = document.querySelector("#restart");
@@ -227,26 +228,9 @@ const events = (function events () {
         player1Element.innerHTML = "";
         player2Element.innerHTML = "";
         dialog.showModal();
-        })
+        });
     
     })();
-
-    //FIX function addStylingToGrid() {
-    //     const {currentTurn} = game();
-    //     const squares = document.querySelectorAll(".square");
-    //     squares.forEach(square => {
-    //         square.addEventListener ("mouseenter", ()=> {
-    //             if (currentTurn == 1) {
-    //                 square.textContent = "X"
-    //             } else if (currentTurn == 2) {
-    //                 square.textContent = "O"
-    //             }
-    //         })
-    //         square.addEventListener ("mouseleave", ()=> {
-    //             square.textContent = "";
-    //         })
-    //         });
-    // }
 
   return {addEventListenerForBoard, continueButton};
  })();
