@@ -2,6 +2,7 @@ const gameBoard = (function (){
     let board = [1,2,3,4,5,6,7,8,9];
     let player1Board = [];
     let player2Board = [];
+    let playerScores = [0,0];
 
     function display() {
         console.log("------");
@@ -22,7 +23,7 @@ const gameBoard = (function (){
       })
     }
 
-    return {board, display, player1Board, player2Board, resetBoard};
+    return {board, display, player1Board, player2Board, resetBoard, playerScores};
 })();
 
 function player() {
@@ -81,13 +82,12 @@ function game() {
         7: [1,5,9],
         8: [3,5,7],
     };
-    let player1Score = 0;
-    let player2Score = 0;
     let gameOver = false;
     let currentTurn = 1;
     let playerChoice;
     const {continueButton} = events;
-    const {board, display, player1Board, player2Board, resetBoard} = gameBoard;
+    const {board, display, player1Board, player2Board,} = gameBoard;
+    let {playerScores} = gameBoard;
     const {getPlayerInfo} = player();
     playersInfo = getPlayerInfo();
     function playTurn(playedLocation) {
@@ -116,14 +116,12 @@ function game() {
                 announceResult(`Game Over! ${playersInfo.player1.player} is the winner!`);
                 console.log(`Game Over! ${playersInfo.player1.player} is the winner!`);
                 gameOver = true;
-                player1Score += 1;
-                updatePlayerScore("#player-score1", "#player-score2");
+                updatePlayerScore("#player-score1", "#player-score2", "player1win");
             } else if (winningCondition[i].every((element) => player2Board.includes(element))) {
                 announceResult(`Game Over! ${playersInfo.player2.player} is the winner!`);
                 console.log(`Game Over! ${playersInfo.player2.player} is the winner!`);
                 gameOver = true;
-                player2Score += 1;
-                updatePlayerScore("#player-score1", "#player-score2");
+                updatePlayerScore("#player-score1", "#player-score2", "player2win");
             } 
         }
 
@@ -140,23 +138,40 @@ function game() {
           } 
     }
 
-    function updatePlayerScore(elementID1, elementID2) {
-        const player1ScoreElement = document.querySelector(elementID1);
-        const player2ScoreElement = document.querySelector(elementID2);
-        player1ScoreElement.textContent = `Score: ${player1Score}`;
-        player2ScoreElement.textContent = `Score: ${player2Score}`;
+    function updatePlayerScore(elementID1, elementID2, winner) {
+        let player1Score;
+        let player2Score;
+
+        if (winner == "player1win") {
+            player1Score = playerScores[0];
+            player1Score += 1; 
+            playerScores[0] = player1Score;
+            player1Score = 0; 
+        } else if (winner == "player2win") {
+            player2Score = playerScores[1];
+            player2Score += 1; 
+            playerScores[1] = player2Score;
+            player2Score = 0; 
+        }
+        
+        (function () {
+            const player1ScoreElement = document.querySelector(elementID1);
+            const player2ScoreElement = document.querySelector(elementID2);
+            player1ScoreElement.textContent = `Score: ${playerScores[0]}`;
+            player2ScoreElement.textContent = `Score: ${playerScores[1]}`;
+        })();
     }
 
     function resetScore() {
-        player1Score = 0;
-        player2Score = 0;
+        playerScores.length = 0;
+        playerScores.push(0, 0);
     }
 
     function announceResult(text) {
         const announcementElement = document.querySelector(".game-announcement");
         announcementElement.textContent = text;
     }
-    return {playTurn, player1Score, player2Score, updatePlayerScore, resetScore, currentTurn};
+    return {playTurn, updatePlayerScore, resetScore, currentTurn};
 }
 
 const events = (function events () {
