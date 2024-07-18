@@ -26,7 +26,6 @@ const gameBoard = (function (){
 })();
 
 function player() {
-    // const {player1Score, player2Score} = game();
     function getPlayerInfo(){
         let player1Name = document.querySelector("#player1-name").value;
         let player2Name = document.querySelector("#player2-name").value;
@@ -82,12 +81,12 @@ function game() {
         7: [1,5,9],
         8: [3,5,7],
     };
-    let player1Score = 0
-    let player2Score = 0
+    let player1Score = 0;
+    let player2Score = 0;
     let gameOver = false;
     let currentTurn = 1;
     let playerChoice;
-    const {continueButton} = events
+    const {continueButton} = events;
     const {board, display, player1Board, player2Board, resetBoard} = gameBoard;
     const {getPlayerInfo} = player();
     playersInfo = getPlayerInfo();
@@ -129,7 +128,7 @@ function game() {
         }
 
         if (player1Board.length + player2Board.length === 9 && gameOver === false) {
-            announceResult("It's a tie no one won!")
+            announceResult("It's a tie no one won!");
             console.log("It's a tie no one won!");
                 gameOver = true;
         }
@@ -142,17 +141,22 @@ function game() {
     }
 
     function updatePlayerScore(elementID1, elementID2) {
-        const player1ScoreElement = document.querySelector(elementID1)
-        const player2ScoreElement = document.querySelector(elementID2)
+        const player1ScoreElement = document.querySelector(elementID1);
+        const player2ScoreElement = document.querySelector(elementID2);
         player1ScoreElement.textContent = `Score: ${player1Score}`;
         player2ScoreElement.textContent = `Score: ${player2Score}`;
     }
 
+    function resetScore() {
+        player1Score = 0;
+        player2Score = 0;
+    }
+
     function announceResult(text) {
         const announcementElement = document.querySelector(".game-announcement");
-        announcementElement.textContent = text
+        announcementElement.textContent = text;
     }
-    return {playTurn, player1Score, player2Score};
+    return {playTurn, player1Score, player2Score, updatePlayerScore, resetScore};
 }
 
 const events = (function events () {
@@ -194,5 +198,22 @@ const events = (function events () {
             gameBoard.resetBoard();
           });
     }
+
+    (function restartButton() {
+        const restartBtn = document.querySelector("#restart");
+        restartBtn.addEventListener("click", () => {
+        const dialog = document.querySelector("dialog");
+        const player1Element = document.querySelector("#player1");
+        const player2Element = document.querySelector("#player2");
+        const {resetScore} = game();
+        gameBoard.resetBoard();
+        resetScore();
+        player1Element.innerHTML = "";
+        player2Element.innerHTML = "";
+        dialog.showModal();
+        })
+    
+    })();
+
   return {addEventListenerForBoard, continueButton};
  })();
