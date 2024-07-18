@@ -156,7 +156,7 @@ function game() {
         const announcementElement = document.querySelector(".game-announcement");
         announcementElement.textContent = text;
     }
-    return {playTurn, player1Score, player2Score, updatePlayerScore, resetScore};
+    return {playTurn, player1Score, player2Score, updatePlayerScore, resetScore, currentTurn};
 }
 
 const events = (function events () {
@@ -173,6 +173,7 @@ const events = (function events () {
         createElements(playersInfo.player1.player, playersInfo.player1.mark, "#player1", 1);
         createElements(playersInfo.player2.player, playersInfo.player2.mark, "#player2", 2);
         addEventListenerForBoard();
+        //FIX addStylingToGrid();
         game();
         dialog.close();
  });
@@ -214,6 +215,23 @@ const events = (function events () {
         })
     
     })();
+
+    //FIX function addStylingToGrid() {
+    //     const {currentTurn} = game();
+    //     const squares = document.querySelectorAll(".square");
+    //     squares.forEach(square => {
+    //         square.addEventListener ("mouseenter", ()=> {
+    //             if (currentTurn == 1) {
+    //                 square.textContent = "X"
+    //             } else if (currentTurn == 2) {
+    //                 square.textContent = "O"
+    //             }
+    //         })
+    //         square.addEventListener ("mouseleave", ()=> {
+    //             square.textContent = "";
+    //         })
+    //         });
+    // }
 
   return {addEventListenerForBoard, continueButton};
  })();
